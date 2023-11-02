@@ -20,6 +20,14 @@
         android:onClick="takePhoto"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+    <TextView
+        android:id="@+id/inclinationTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Inclination Angle: "
+        android:textSize="18sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/galleryRecyclerView"
@@ -27,6 +35,12 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/photoButton"
        />
+    <com.example.myapplication.TShirtOutlineView
+        android:id="@+id/tShirtOutlineView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        />
 
 
 </RelativeLayout>

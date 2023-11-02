@@ -9,6 +9,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorListener;
+import android.hardware.SensorManager;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -39,6 +44,7 @@ import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -52,6 +58,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.nio.ByteBuffer;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,7 +67,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-public class CamaraIntentActivity extends Activity {
+public class CamaraIntentActivity extends Activity  implements SensorEventListener{
 
     private static  final SparseIntArray ORIENTATIONS = new SparseIntArray();
     static{
@@ -144,6 +151,7 @@ public class CamaraIntentActivity extends Activity {
     private CaptureRequest.Builder mPreviewCaptureRequestBuilder;
 
     private CameraCaptureSession mCameraCaptureSession;
+
 
 
     private CameraCaptureSession.CaptureCallback mSessionCaptureCallback = new CameraCaptureSession.CaptureCallback() {
@@ -238,6 +246,12 @@ public class CamaraIntentActivity extends Activity {
 
         }
     }
+
+    private SensorManager sensorManager;
+    private Sensor accelerometer;
+
+    private TextView inclinationTextView;
+    private DecimalFormat decimalFormat;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -262,18 +276,30 @@ public class CamaraIntentActivity extends Activity {
             }
         };
         mTextureView = (TextureView) findViewById(R.id.textureView);
+        // Initialize the SensorManager and accelerometer
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        // Find the TextView by its ID
+        inclinationTextView = findViewById(R.id.inclinationTextView);
+        // Initialize the decimal format with two decimal places
+        decimalFormat = new DecimalFormat("#.##");
+
     }
 
     @Override
     protected void onPause() {
         closeCamera();
         closeBackgroundThread();
+        sensorManager.unregisterListener((SensorListener) this);
         super.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        // Register the accelerometer sensor listener
+        sensorManager.registerListener((SensorEventListener) this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+
         openBackgroundThread();
         if (mTextureView.isAvailable()) {
                 setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
@@ -281,6 +307,33 @@ public class CamaraIntentActivity extends Activity {
         } else {
             mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
         }
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            float[] gravity = event.values;
+
+            // Calculate the angle of inclination with respect to the ground
+            double inclination = Math.atan2(gravity[1], gravity[2]);
+
+            // Convert to degrees
+            inclination = Math.toDegrees(inclination);
+            String roundedAngle = decimalFormat.format(inclination);
+            // Update the TextView with the inclination angle
+            inclinationTextView.setText("Inclination Angle: " + roundedAngle);
+            // Round the inclination angle to two decimal places
+
+
+            // Update your UI or perform other actions with the inclination angle
+            // For example, you can display it in a TextView
+            // textView.setText("Inclination Angle: " + inclination);
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
     }
 
     @Override
