@@ -25,23 +25,25 @@ public class TShirtOutlineView extends View {
 
         tShirtPath = new Path();
         // Define the path for the T-shirt shape (vertices and segments)
-        tShirtPath.moveTo(200, 900); // left-sleeves-outer
-        tShirtPath.lineTo(300, 1000); // left-sleeves-inner
-        tShirtPath.lineTo(400, 900); // left-chest
-        tShirtPath.lineTo(380, 1500); // left-waist
-        tShirtPath.lineTo(720, 1500); // right-waist
-        tShirtPath.lineTo(700, 900); // right-chest
-        tShirtPath.lineTo(800, 1000); // right-sleeves-inner
-        tShirtPath.lineTo(900, 900); // right-sleeves-outer
-        tShirtPath.lineTo(780, 730); // right-shoulder
-        tShirtPath.lineTo(660, 670); //right-neck-upper
-        tShirtPath.lineTo(610, 720); // right-neck-middle
-        tShirtPath.lineTo(560, 740); // right-neck-lower
-        tShirtPath.lineTo(540, 740); // left-neck-lower
-        tShirtPath.lineTo(490, 720); // left-neck-middle
-        tShirtPath.lineTo(440, 670); // left-neck-upper
-        tShirtPath.lineTo(320, 730); // left-shoulder
-        tShirtPath.close();
+        tShirtPath.moveTo(50, 480); // left-shoulder
+       // tShirtPath.lineTo(180, 900); // left-chest
+        tShirtPath.lineTo(950, 480); // left-waist
+        tShirtPath.lineTo(950, 1700); // right-waist
+        //tShirtPath.lineTo(820, 900); // right-chest
+        //tShirtPath.lineTo(930, 950); // right-sleeves-inner
+        //tShirtPath.lineTo(980, 600); // right-sleeves-outer
+        tShirtPath.lineTo(50, 1700); // right-shoulder
+        tShirtPath.lineTo(50,480);
+       // tShirtPath.lineTo(620, 460); //right-neck-upper
+        //tShirtPath.lineTo(610, 720); // right-neck-middle
+        //tShirtPath.lineTo(560, 740); // right-neck-lower
+        //tShirtPath.lineTo(540, 740); // left-neck-lower
+        //tShirtPath.lineTo(490, 720); // left-neck-middle
+        //tShirtPath.lineTo(380, 460); // left-neck-upper
+        tShirtPath.moveTo(500,400);
+        tShirtPath.lineTo(500,1780);
+
+        //tShirtPath.close();
 
 
 
